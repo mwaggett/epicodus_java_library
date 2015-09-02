@@ -126,6 +126,16 @@ public class Book {
     }
   }
 
+  public int numberOfCopies() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT COUNT(title) FROM books WHERE title = :title";
+      int count = con.createQuery(sql)
+        .addParameter("title", title)
+        .executeScalar(Integer.class);
+      return count;
+    }
+  }
+
   // public void checkout(Patron patron) {
   //   try(Connection con = DB.sql2o.open()) {
   //     String sql = "UPDATE books SET patron_id = :patron_id";

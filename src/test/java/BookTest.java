@@ -33,7 +33,7 @@ public class BookTest {
   }
 
   @Test
-  public void equals_returnsFalseWhenParamsMatch() {
+  public void equals_returnsFalseWhenDifferent() {
     Book firstInstance = new Book("Moby Dick");
     Book secondInstance = new Book("Great Expectations");
     assertEquals(false, firstInstance.equals(secondInstance));
@@ -95,5 +95,14 @@ public class BookTest {
     instance.save();
     List<Book> searchResults = Book.search("ob");
     assertTrue(searchResults.contains(instance));
+  }
+
+  @Test
+  public void numberOfCopies_countsBooksWithSameTitle() {
+    Book firstInstance = new Book("Moby Dick");
+    firstInstance.save();
+    Book secondInstance = new Book("Moby Dick");
+    secondInstance.save();
+    assertEquals(2, firstInstance.numberOfCopies());
   }
 }
