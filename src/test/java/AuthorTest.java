@@ -1,5 +1,6 @@
 import org.junit.*;
 import static org.junit.Assert.*;
+import java.util.List;
 
 public class AuthorTest {
 
@@ -86,5 +87,13 @@ public class AuthorTest {
     newBook.save();
     instance.addBook(newBook);
     assertTrue(instance.getBooks().contains(newBook));
+  }
+
+  @Test
+  public void search_returnsPartialMatches() {
+    Author instance = new Author("Rick Ransom");
+    instance.save();
+    List<Author> searchResults = Author.search("Ran");
+    assertTrue(searchResults.contains(instance));
   }
 }

@@ -103,4 +103,15 @@ public class Author {
     }
   }
 
+  public static List<Author> search(String query) {
+    try(Connection con = DB.sql2o.open()) {
+      String searchQuery = "%"+query+"%";
+      String sql = "SELECT * FROM authors WHERE name LIKE :searchQuery";
+      List<Author> authors = con.createQuery(sql)
+        .addParameter("searchQuery", searchQuery)
+        .executeAndFetch(Author.class);
+      return authors;
+    }
+  }
+
 }

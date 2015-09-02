@@ -115,6 +115,17 @@ public class Book {
     }
   }
 
+  public static List<Book> search(String query) {
+    try(Connection con = DB.sql2o.open()) {
+      String searchQuery = "%"+query+"%";
+      String sql = "SELECT * FROM books WHERE title LIKE :searchQuery";
+      List<Book> books = con.createQuery(sql)
+        .addParameter("searchQuery", searchQuery)
+        .executeAndFetch(Book.class);
+      return books;
+    }
+  }
+
   // public void checkout(Patron patron) {
   //   try(Connection con = DB.sql2o.open()) {
   //     String sql = "UPDATE books SET patron_id = :patron_id";
