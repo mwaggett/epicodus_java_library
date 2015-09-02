@@ -58,7 +58,7 @@ public class Patron {
      .addParameter("id", id)
      .executeUpdate();
 
-     String deleteCheckouts = "UPDATE books SET patron_id = null WHERE patron_id = :id";
+     String deleteCheckouts = "UPDATE books SET patron_id = 0 WHERE patron_id = :id";
      con.createQuery(deleteCheckouts)
      .addParameter("id", id)
      .executeUpdate();
@@ -82,15 +82,14 @@ public class Patron {
     }
   }
 
-  public void checkout(Book book) {
+  public List<Book> getBooks() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "UPDATE books SET patron_id = :patron_id";
-      con.createQuery(sql)
-        .addParameter("patron_id", book.getPatronId())
-        .executeUpdate();
+      String sql = "SELECT * FROM books WHERE patron_id=:patron_id";
+      List<Book> books = con.createQuery(sql)
+        .addParameter("patron_id", id)
+        .executeAndFetch(Book.class);
+      return books;
     }
   }
-
-  //getBooks
 
 }

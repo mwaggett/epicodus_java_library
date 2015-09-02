@@ -105,4 +105,25 @@ public class BookTest {
     secondInstance.save();
     assertEquals(2, firstInstance.numberOfCopies());
   }
+
+  @Test
+  public void isCheckedOut_checksIfCheckedOut_true() {
+    Patron instance = new Patron("Seymour Buttz");
+    instance.save();
+    Book newBook = new Book("Moby Dick");
+    newBook.save();
+    Book savedBook = Book.find(newBook.getId());
+    savedBook.checkout(instance);
+    System.out.println(savedBook.getPatronId());
+    assertEquals(true, savedBook.isCheckedOut());
+  }
+
+  @Test
+  public void isCheckedOut_checksIfCheckedOut_false() {
+    Book newBook = new Book("Moby Dick");
+    newBook.save();
+    Book savedBook = Book.find(newBook.getId());
+    assertEquals(false, savedBook.isCheckedOut());
+  }
+
 }

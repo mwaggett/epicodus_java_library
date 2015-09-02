@@ -79,4 +79,15 @@ public class PatronTest {
     assertEquals(0, Patron.all().size());
   }
 
+  @Test
+  public void getBooks_returnsCheckedOutBooks() {
+    Patron instance = new Patron("Seymour Buttz");
+    instance.save();
+    Book newBook = new Book("Moby Dick");
+    newBook.save();
+    Book savedBook = Book.find(newBook.getId());
+    savedBook.checkout(instance);
+    assertTrue(instance.getBooks().contains(savedBook));
+  }
+
 }

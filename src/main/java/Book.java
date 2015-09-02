@@ -131,4 +131,23 @@ public class Book {
     }
   }
 
+  public void checkout(Patron patron) {
+    this.patron_id = patron.getId();
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE books SET patron_id = :patron_id WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("id", id)
+        .addParameter("patron_id", patron.getId())
+        .executeUpdate();
+    }
+  }
+
+  public boolean isCheckedOut() {
+    if (patron_id == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
 }
