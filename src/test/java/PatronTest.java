@@ -90,4 +90,23 @@ public class PatronTest {
     assertTrue(instance.getBooks().contains(savedBook));
   }
 
+
+  @Test
+  public void getHistory_returnsEveryBookPatronCheckedOut() {
+    Patron instance = new Patron("Seymour Buttz");
+    instance.save();
+    Book newBook = new Book("Moby Dick");
+    newBook.save();
+    Book secondBook = new Book("Don Juan");
+    secondBook.save();
+    Book thirdBook = new Book("Beep Beep");
+    thirdBook.save();
+    newBook.checkout(instance);
+    secondBook.checkout(instance);
+    thirdBook.checkout(instance);
+    assertTrue(instance.getHistory().contains(newBook));
+    assertTrue(instance.getHistory().contains(secondBook));
+    assertTrue(instance.getHistory().contains(thirdBook));
+  }
+
 }

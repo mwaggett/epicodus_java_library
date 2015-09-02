@@ -139,6 +139,11 @@ public class Book {
         .addParameter("id", id)
         .addParameter("patron_id", patron.getId())
         .executeUpdate();
+      String sql1 = "INSERT INTO checkouts (book_id, patron_id) VALUES (:book_id, :patron_id)";
+      con.createQuery(sql1)
+          .addParameter("book_id", id)
+          .addParameter("patron_id", patron.getId())
+          .executeUpdate();
     }
   }
 

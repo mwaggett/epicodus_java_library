@@ -92,4 +92,14 @@ public class Patron {
     }
   }
 
+  public List<Book> getHistory() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT books.* FROM patrons JOIN checkouts ON (patrons.id = checkouts.patron_id) JOIN books ON (checkouts.book_id = books.id) WHERE patrons.id = :id";
+      List<Book> books = con.createQuery(sql)
+      .addParameter("id", id)
+      .executeAndFetch(Book.class);
+    return books;
+    }
+  }
+
 }
