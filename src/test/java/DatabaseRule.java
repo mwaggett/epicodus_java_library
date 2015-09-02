@@ -9,9 +9,16 @@ public class DatabaseRule extends ExternalResource {
 
   protected void after() {
     try(Connection con = DB.sql2o.open()) {
-      String deleteTableQuery = "DELETE FROM table_name *;"; // Change to actual table name.
-      // v^Add same things for any other tables in the database.^v
-      con.createQuery(deleteTableQuery).executeUpdate();
+      String deleteBooksQuery = "DELETE FROM books *;";
+      String deleteAuthorsQuery = "DELETE FROM authors *;";
+      String deleteBooksAuthorsQuery = "DELETE FROM books_authors *;";
+      String deletePatronsQuery = "DELETE FROM patrons *;";
+      String deleteCheckoutsQuery = "DELETE FROM checkouts *;";
+      con.createQuery(deleteBooksQuery).executeUpdate();
+      con.createQuery(deleteAuthorsQuery).executeUpdate();
+      con.createQuery(deletePatronsQuery).executeUpdate();
+      con.createQuery(deleteCheckoutsQuery).executeUpdate();
+      con.createQuery(deleteBooksAuthorsQuery).executeUpdate();
     }
   }
 }
