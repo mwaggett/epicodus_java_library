@@ -114,7 +114,6 @@ public class BookTest {
     newBook.save();
     Book savedBook = Book.find(newBook.getId());
     savedBook.checkout(instance);
-    System.out.println(savedBook.getPatronId());
     assertEquals(true, savedBook.isCheckedOut());
   }
 
@@ -123,6 +122,18 @@ public class BookTest {
     Book newBook = new Book("Moby Dick");
     newBook.save();
     Book savedBook = Book.find(newBook.getId());
+    assertEquals(false, savedBook.isCheckedOut());
+  }
+
+  @Test
+  public void isCheckedOut_checksIfCheckedOutAfterCheckIn_false() {
+    Patron instance = new Patron("Seymour Buttz");
+    instance.save();
+    Book newBook = new Book("Moby Dick");
+    newBook.save();
+    Book savedBook = Book.find(newBook.getId());
+    savedBook.checkout(instance);
+    savedBook.checkin();
     assertEquals(false, savedBook.isCheckedOut());
   }
 

@@ -142,6 +142,16 @@ public class Book {
     }
   }
 
+  public void checkin() {
+    this.patron_id = 0;
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE books SET patron_id = 0 WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
   public boolean isCheckedOut() {
     if (patron_id == 0) {
       return false;
