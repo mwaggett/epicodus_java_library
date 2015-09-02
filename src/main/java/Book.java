@@ -5,7 +5,7 @@ public class Book {
 
   private int id;
   private String title;
-  //private int patron_id;
+  private int patron_id;
 
   public Book (String title) {
     this.title = title;
@@ -20,9 +20,9 @@ public class Book {
     return title;
   }
 
-  // public int getPatronId() {
-  //   return patron_id;
-  // }
+  public int getPatronId() {
+    return patron_id;
+  }
 
   @Override
   public boolean equals(Object otherBookInstance) {
@@ -31,7 +31,7 @@ public class Book {
     } else {
       Book newBookInstance = (Book) otherBookInstance;
       return this.getTitle().equals(newBookInstance.getTitle()) &&
-             //this.getPatronId().equals(newBookInstance.getPatronId()) &&
+             this.getPatronId() == newBookInstance.getPatronId() &&
              this.getId() == newBookInstance.getId();
     }
   }
@@ -69,12 +69,7 @@ public class Book {
      con.createQuery(deleteBooksAuthors)
      .addParameter("id", id)
      .executeUpdate();
-
-     String deleteCheckouts = "DELETE FROM checkouts WHERE book_id = :id";
-     con.createQuery(deleteCheckouts)
-     .addParameter("id", id)
-     .executeUpdate();
-    }
+   }
   }
 
 
@@ -135,16 +130,5 @@ public class Book {
       return count;
     }
   }
-
-  // public void checkout(Patron patron) {
-  //   try(Connection con = DB.sql2o.open()) {
-  //     String sql = "UPDATE books SET patron_id = :patron_id";
-  //     con.createQuery(sql)
-  //       .addParameter("patron_id", patron.getId());
-  //       .executeUpdate();
-  //   }
-  // }
-
-
 
 }
