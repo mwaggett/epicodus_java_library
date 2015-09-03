@@ -9,7 +9,7 @@ public class Book {
 
   public Book (String title) {
     this.title = title;
-    //this.patron_id = null;
+    this.patron_id = 0;
   }
 
   public int getId() {
@@ -100,6 +100,16 @@ public class Book {
     }
   }
 
+  public void removeAuthor(Author author){
+    try(Connection con = DB.sql2o.open()){
+      String sql = "DELETE FROM books_authors WHERE book_id = :book_id AND author_id = :author_id";
+      con.createQuery(sql)
+      .addParameter("book_id", id)
+      .addParameter("author_id", author.getId())
+      .executeUpdate();
+    }
+  }
+
   public List<Author> getAuthors() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "SELECT authors.* FROM books JOIN books_authors ON (books.id = books_authors.book_id) JOIN authors ON (books_authors.author_id = authors.id) WHERE books.id = :id";
@@ -124,6 +134,16 @@ public class Book {
   public int numberOfCopies() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "SELECT COUNT(title) FROM books WHERE title = :title";
+      int count = con.createQuery(sql)
+        .addParameter("title", title)
+        .executeScalar(Integer.class);
+      return count;
+    }
+  }
+
+  public int numberOfAvailableCopies() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT COUNT(title) FROM books WHERE title = :title AND patron_id = 0";
       int count = con.createQuery(sql)
         .addParameter("title", title)
         .executeScalar(Integer.class);

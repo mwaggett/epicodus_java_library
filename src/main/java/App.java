@@ -65,16 +65,6 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
-    // get("/admin/books/:id", (request, response) -> {
-    //   HashMap<String, Object> model = new HashMap<String, Object>();
-    //
-    //   Book book = Book.find(Integer.parseInt(request.params(":id")));
-    //
-    //   model.put("book", book);
-    //   model.put("template", "templates/edit-book-form.vtl");
-    //   return new ModelAndView(model, layout);
-    // }, new VelocityTemplateEngine());
-
     get("/admin/books/new", (request, response) -> {
       HashMap<String, Object> model = new HashMap<String, Object>();
 
@@ -102,6 +92,64 @@ public class App {
         author.save();
         newBook.addAuthor(author);
       }
+
+      response.redirect("/admin");
+      return null;
+    });
+
+    get("/admin/books/:id", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+
+
+      List<Author> authors = Author.all();
+      List<Book> books = Book.all();
+      Book book = Book.find(Integer.parseInt(request.params(":id")));
+      ArrayList<Patron> patronsWithBook = new ArrayList<Patron>();
+      for (Book instance : books) {
+        if (instance.getTitle().equals(book.getTitle()) && instance.getPatronId() != 0) {
+          Patron patron = Patron.find(instance.getPatronId());
+          patronsWithBook.add(patron);
+        }
+      }
+
+      model.put("authors", authors);
+      model.put("books", books);
+      model.put("book", book);
+      model.put("patronsWithBook", patronsWithBook);
+      model.put("template", "templates/edit-book-form.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/admin/books/:id/update", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+
+      Book book = Book.find(Integer.parseInt(request.params(":id")));
+      book.update(request.queryParams("title"));
+      String newAuthorName = request.queryParams("newAuthor");
+      String oldAuthorId = request.queryParams("oldAuthor");
+      String removeAuthor = request.queryParams("removeAuthor");
+      if (removeAuthor != "") {
+        Author author = Author.find(Integer.parseInt(removeAuthor));
+        book.removeAuthor(author);
+      }
+      if (newAuthorName.equals("")) {
+        Author author = Author.find(Integer.parseInt(oldAuthorId));
+        book.addAuthor(author);
+      } else {
+        Author author = new Author(newAuthorName);
+        author.save();
+        book.addAuthor(author);
+      }
+
+      response.redirect("/admin");
+      return null;
+    });
+
+    post("/admin/books/:id/delete", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+
+      Book book = Book.find(Integer.parseInt(request.params(":id")));
+      book.delete();
 
       response.redirect("/admin");
       return null;

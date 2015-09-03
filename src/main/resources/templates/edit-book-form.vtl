@@ -1,0 +1,61 @@
+<h1>Book stats</h1>
+
+<h2>$book.getTitle()</h2>
+
+
+
+<p><b>Number of Copies:</b> $book.numberOfCopies()</p>
+
+<p><b>Copies available:</b> $book.numberOfAvailableCopies()</p>
+
+<p><b>Patrons who have checked out the gd book:</p></b>
+<ul>
+  #foreach ($patron in $patronsWithBook)
+    <li>$patron.getName()</li>
+  #end
+</ul>
+
+
+<h3>Edit Book</h3>
+
+
+<form action="/admin/books/$book.getId()/update" method="post">
+  <div class='form-group'>
+
+    <label>Edit book title</label>
+    <br>
+    <input type="text" name="title" value="$book.getTitle()">
+    <br>
+    <label>Add a new author or select from existing authors</label>
+    <br>
+    <input name="newAuthor" type="text">
+    <br>
+    <select name="oldAuthor">
+      <option value="">---</option>
+      #foreach($author in $authors)
+        <option value=$author.getId()>$author.getName()</option>
+      #end
+    </select>
+    <br>
+    <label>Remove author</label>
+    <br>
+    <select name="removeAuthor">
+      <option value="">---</option>
+      #foreach($author in $book.getAuthors())
+        <option value=$author.getId()>$author.getName()</option>
+      #end
+    </select>
+    <button type="submit" class="btn btn-danger">submit</button>
+  </div>
+</form>
+
+
+<h3>delete book</h3>
+
+<form action="/admin/books/$book.getId()/delete" method="post">
+  <div class='form-group'>
+    <label> BURN book</label>
+    <br>
+    <button type="submit" class="btn btn-danger">BURN IT</button>
+  </div>
+</form>
