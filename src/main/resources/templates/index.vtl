@@ -1,8 +1,23 @@
-<h1>Home Page</h1>
-<form action='/newpage' method=''>
-  <div class='form-group'>
-    <label></label>
-    <input type="" name="" id="" class="form-control">
-  </div>
-  <button type="submit" class='btn'>Submit!</button>
+<h1>Welcome to Your Local Library!</h1>
+
+<img src="/img/hot-librarian.jpg">
+
+<h3>Who are you?</h3>
+
+<p><a href="/admin">Librarian</a></p>
+
+<p>Patron</p>
+<ul>
+  #foreach($patron in $patrons)
+    <li>
+      <a href="patrons/$patron.getId()">$patron.getName()</a>
+    </li>
+  #end
+</ul>
+
+<p>Don't see your name? Sign up below to become a patron!</p>
+<form action="/patrons/create" method="post">
+  <label for="name">Enter your name:</label>
+  <input id="name" name="name" type="text">
+  <button type="submit" class="btn btn-info">Sign up!</button>
 </form>

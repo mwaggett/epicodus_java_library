@@ -1,0 +1,32 @@
+<h1>Welcome to the administrator page</h1>
+
+<p>Search for books by Title:</p>
+<form action = "/admin/title/search" method="post">
+
+  <input name="booktitle" type="text" id="booktitle">
+  <button type="submit" class="btn btn-info">Submit</button>
+</form>
+
+
+
+
+<p>Search for books by Author:</p>
+<form action = "/admin/author/search" method="post">
+
+  <input name="bookauthor" type="text" id="bookauthor">
+  <button type="submit" class="btn btn-info">Submit</button>
+</form>
+
+
+
+<p>Books</p>
+<ul>
+  #foreach($book in $books)
+  <li>
+    <a href="/admin/books/$book.getId()">$book.getTitle()</a> by
+    #foreach($author in $book.getAuthors())
+      $author.getName() 
+    #end
+  </li>
+  #end
+</ul>
