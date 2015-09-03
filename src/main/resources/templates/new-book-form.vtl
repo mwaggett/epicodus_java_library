@@ -1,0 +1,23 @@
+<h1>Add a book</h1>
+
+
+<p>Enter book info:</p>
+
+<form action="/admin/books/new" method="post">
+  <div class='form-group'>
+    <label for="title">Enter book title:</label>
+    <input id="title" name="title" type="text">
+    <br>
+    <label>Add a new author or select from existing authors</label>
+    <br>
+    <input name="newAuthor" type="text">
+    <br>
+    <select name="oldAuthor">
+      <option value="">---</option>
+      #foreach($author in $authors)
+        <option value=$author.getId()>$author.getName()</option>
+      #end
+    </select>
+    <button type="submit" class="btn btn-info">Submit</button>
+  </div>
+</form>

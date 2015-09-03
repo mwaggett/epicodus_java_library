@@ -41,7 +41,7 @@ public class App {
       String searchTitle = request.queryParams("booktitle");
       List<Book> searchResults = Book.search(searchTitle);
 
-      model.put("books", searchResults); //books here refers to books from search result, 
+      model.put("books", searchResults); //books here refers to books from search result,
       model.put("template", "templates/admin.vtl");//use same template as the admin search page, itll look similar but be a different page
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
@@ -64,6 +64,48 @@ public class App {
       model.put("template", "templates/admin.vtl");//use same template as the admin search page, itll look similar but be a different page
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
+
+    // get("/admin/books/:id", (request, response) -> {
+    //   HashMap<String, Object> model = new HashMap<String, Object>();
+    //
+    //   Book book = Book.find(Integer.parseInt(request.params(":id")));
+    //
+    //   model.put("book", book);
+    //   model.put("template", "templates/edit-book-form.vtl");
+    //   return new ModelAndView(model, layout);
+    // }, new VelocityTemplateEngine());
+
+    get("/admin/books/new", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+
+      List<Author> authors = Author.all();
+
+      model.put("authors", authors);
+      model.put("template", "templates/new-book-form.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/admin/books/new", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+
+      Book newBook = new Book(request.queryParams("title"));
+      newBook.save();
+
+      String newAuthorName = request.queryParams("newAuthor");
+      String oldAuthorId = request.queryParams("oldAuthor");
+
+      if (newAuthorName.equals("")) {
+        Author author = Author.find(Integer.parseInt(oldAuthorId));
+        newBook.addAuthor(author);
+      } else {
+        Author author = new Author(newAuthorName);
+        author.save();
+        newBook.addAuthor(author);
+      }
+
+      response.redirect("/admin");
+      return null;
+    });
 
 
     post("/patrons/create", (request, response) -> {
