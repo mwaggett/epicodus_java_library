@@ -1,6 +1,6 @@
 # Library Catalog
 
-##### _Many-to-Many Relationships for Epicodus, 3 September 2015_
+##### _Many-to-Many Relationships practice for Epicodus, 3 September 2015_
 
 #### By **Maggie O'Neill & Molly Waggett**
 
